@@ -26,21 +26,10 @@ export const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (
-  //     prevState.searchQuery !== searchQuery ||
-  //     prevState.page !== page
-  //   ) {
-  //     getData();
-  //   }
-  //   if (
-  //     totalImageCount === images.length &&
-  //     totalImageCount !== 0 &&
-  //     prevState.images.length !== images.length
-  //   ) {
-  //     toast(`That's all images on this request 😥`);
-  //   }
   useEffect(() => {
+    if (!searchQuery) {
+      return;
+    }
     getData();
   }, [searchQuery, page]);
   useEffect(() => {
