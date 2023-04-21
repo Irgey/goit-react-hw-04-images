@@ -30,12 +30,13 @@ export const App = () => {
       return;
     }
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, page]);
   useEffect(() => {
     if (totalImageCount === images.length && totalImageCount !== 0) {
       toast(`That's all images on this request 😥`);
     }
-  }, [images]);
+  }, [images, totalImageCount]);
 
   /**
    * Own functions
