@@ -20,11 +20,10 @@ export const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [totalImageCount, setTotalImageCount] = useState(0);
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(12);
+  const [perPage] = useState(12);
   const [largeImageUrl, setLargeImageUrl] = useState('');
   const [alt, setAlt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!searchQuery) {
