@@ -1,6 +1,12 @@
+/**
+ * Libraries, services
+ */
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
+/**
+ * Components
+ */
 import { StyledModal, StyledOverlay } from './Modal.styled';
 
 const modalRoot = document.querySelector('#modal-root');
@@ -9,32 +15,28 @@ export const Modal = ({ onClose, children }) => {
   // componentDidMount() {
   //   window.addEventListener('keydown', this.onEscapeClick);
   // }
-  useEffect(() => window.addEventListener('keydown', onEscapeClick));
+  useEffect(() => window.addEventListener('keydown', onEscapeOrOverlayClick));
 
   // componentWillUnmount() {
-  //   window.removeEventListener('keydown', this.onEscapeClick);
+  //   window.removeEventListener('keydown', this.onEscapeOrOverlayClick);
   // }
   useEffect(() => {
     return () => {
-      window.removeEventListener('keydown', onEscapeClick);
+      window.removeEventListener('keydown', onEscapeOrOverlayClick);
     };
   });
 
   /**
    * Own methods
    */
-  const onEscapeClick = ev => {
-    if (ev.code === 'Escape') {
+  const onEscapeOrOverlayClick = ev => {
+    if (ev.code === 'Escape' || ev.target === ev.currentTarget) {
       onClose();
     }
   };
-  const onOverlayClick = ev => {
-    if (ev.target === ev.currentTarget) {
-      onClose();
-    }
-  };
+
   return createPortal(
-    <StyledOverlay onClick={onOverlayClick} id="backdrop">
+    <StyledOverlay onClick={onEscapeOrOverlayClick} id="backdrop">
       <StyledModal>{children}</StyledModal>
     </StyledOverlay>,
     modalRoot

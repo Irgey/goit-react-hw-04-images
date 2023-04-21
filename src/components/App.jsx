@@ -1,19 +1,21 @@
 /**
+ * Libraries, services
+ */
+import { useCallback, useEffect, useState } from 'react';
+import { BallTriangle } from 'react-loader-spinner';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+import { getPictures } from 'utils/pixabayAPI';
+/**
  * Components
  */
 import { Modal } from './Modal/Modal';
-import { getPictures } from 'utils/pixabayAPI';
+
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { StyledSection } from './App.styled';
-/**
- * Libraries
- */
-import { useEffect, useState } from 'react';
-import { BallTriangle } from 'react-loader-spinner';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
+
 export const App = () => {
   const [modalShown, setModalShown] = useState(false);
   const [images, setImages] = useState([]);
@@ -25,23 +27,7 @@ export const App = () => {
   const [alt, setAlt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (!searchQuery) {
-      return;
-    }
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery, page]);
-  useEffect(() => {
-    if (totalImageCount === images.length && totalImageCount !== 0) {
-      toast(`That's all images on this request 😥`);
-    }
-  }, [images, totalImageCount]);
-
-  /**
-   * Own functions
-   */
-  const getData = () => {
+  const getData = useCallback(() => {
     setIsLoading(true);
     getPictures(searchQuery, page, perPage)
       .then(({ data }) => {
@@ -52,7 +38,23 @@ export const App = () => {
         }
       })
       .finally(() => setIsLoading(false));
-  };
+  }, [page, perPage, searchQuery]);
+
+  useEffect(() => {
+    if (!searchQuery) {
+      return;
+    }
+    getData();
+  }, [searchQuery, page, getData]);
+  useEffect(() => {
+    if (totalImageCount === images.length && totalImageCount !== 0) {
+      toast(`That's all images on this request 😥`);
+    }
+  }, [images, totalImageCount]);
+
+  /**
+   * Own functions
+   */
   const onSearchSubmit = e => {
     e.preventDefault();
     const searchValue = e.target.elements.searchInput.value;
